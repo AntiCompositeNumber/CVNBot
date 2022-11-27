@@ -55,10 +55,10 @@ jobs:
 
   macos:
     name: macOS
-    # Includes Mono 6.12 and MSBuild 16.6.
+    # Includes Mono 6.12 and MSBuild 16.10.
     #
-    # https://github.com/actions/virtual-environments/blob/macOS-10.15/20210607.1/images/macos/macos-10.15-Readme.md
-    runs-on: macos-10.15
+    # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
       - name: Versions
