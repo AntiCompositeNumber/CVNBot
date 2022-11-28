@@ -25,23 +25,24 @@ jobs:
       - run: msbuild src/CVNBot.sln /p:Configuration=Release
       - run: msbuild src/CVNBot.sln /p:Configuration=Debug
 
-  ubuntu18-mono6_8:
+  ubuntu20-mono6_8:
     name: Linux (Mono 6.8)
     # Includes Mono 6.12 and MSBuild 16.6, from download.mono-project.com/repo/ubuntu (stable-bionic).
-    # https://github.com/actions/virtual-environments/blob/ubuntu18/20210606.1/images/linux/Ubuntu1804-README.md
-    runs-on: ubuntu-18.04
+    # https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2004-Readme.md
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      # Downgrade to an older snapshot to more closely match our production server.
+      # Downgrade to an older snapshot to more closely match Toolforge, which runs 6.8.0.105
       - name: Remove default Mono
         run: |
           sudo apt-get remove mono-complete ca-certificates-mono
       - name: Add Mono 6.8 source
         run: |
+          sudo apt install gnupg ca-certificates
           sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-          echo "deb https://download.mono-project.com/repo/debian stable-bionic/snapshots/6.8 main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+          echo "deb https://download.mono-project.com/repo/ubuntu stable-focal/snapshots/6.8.0 main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
           (echo "Package: *" && echo "Pin: origin download.mono-project.com" && echo "Pin-Priority: 1001") | sudo tee /etc/apt/preferences.d/override-1001
-          sudo apt-get update
+          sudo apt update
           sudo apt-cache policy
       - name: Install Mono 6.8 packages
         run: |
